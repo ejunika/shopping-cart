@@ -12,8 +12,8 @@
 
         </ul>
         <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            <input name="searchText" [(ngModel)]="filterText" class="form-control mr-sm-2" type="search" placeholder="Search"
+                aria-label="Search">
         </form>
     </div>
 </nav>
@@ -21,11 +21,34 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-3">
-            Left
+            <div class="card">
+                <div class="card-header">Brands</div>
+                <div class="card-body">
+                    <ul class="list-group">
+                        <li *ngFor="let brand of brands" class="list-group-item">
+                            <div class="custom-control custom-checkbox">
+                                <input [(ngModel)]="brand.checked" type="checkbox" class="custom-control-input"
+                                    [attr.id]="brand.name" [attr.name]="brand.name">
+                                <label class="custom-control-label" [attr.for]="brand.name">
+                                    {{ brand.name }}
+                                </label>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-footer pull-right d-flex">
+                    <button (click)="resetFilters()" class="btn btn-info">
+                        Reset
+                    </button>
+                    <button (click)="applyFilters()" class="btn btn-success ml-auto">Apply</button>
+                </div>
+            </div>
         </div>
         <div class="col">
             <div class="list-group p-4">
-                <app-cart-item *ngFor="let item of itemList" [passingItem]="item"></app-cart-item>
+                <app-cart-item
+                    *ngFor="let item of itemList | itemFilter : appliedBrand: filterText"
+                    [passingItem]="item"></app-cart-item>
             </div>
         </div>
     </div>
